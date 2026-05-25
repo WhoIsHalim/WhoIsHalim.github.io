@@ -1,0 +1,159 @@
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#080b10;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.lang-toggle{display:flex;gap:6px;justify-content:flex-end;padding:1rem 1.5rem 0}
+.lang-btn{font-size:12px;padding:4px 12px;border:1px solid #2a3040;border-radius:20px;background:transparent;color:#8892a4;cursor:pointer;transition:all .2s}
+.lang-btn.active{border-color:#c084fc;color:#c084fc;background:#1a0d2e}
+.hero{padding:2.5rem 1.5rem 2rem;display:flex;align-items:flex-start;gap:1.5rem;border-bottom:1px solid #111827}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar{width:90px;height:90px;border-radius:50%;border:2px solid #2a1f3d;object-fit:cover}
+.status-dot{position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#22c55e;border-radius:50%;border:2px solid #080b10}
+.hero-text{flex:1;min-width:0}
+h1{font-size:2rem;font-weight:700;color:#f8fafc;letter-spacing:-0.02em;line-height:1}
+.username{font-size:13px;color:#c084fc;font-family:'Courier New',monospace;margin:4px 0 10px}
+.bio{font-size:13.5px;color:#94a3b8;line-height:1.7;max-width:480px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #1e2a3a;color:#7dd3fc;background:#071628}
+.tag.purple{color:#c084fc;background:#1a0d2e;border-color:#2a1f3d}
+.tag.green{color:#86efac;background:#071a10;border-color:#0f3320}
+.since{font-size:11px;color:#4b5563;margin-top:12px;font-family:'Courier New',monospace}
+.since span{color:#6366f1}
+
+section{padding:1.75rem 1.5rem;border-bottom:1px solid #111827}
+.sec-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#4b5563;margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+.sec-label::after{content:'';flex:1;height:1px;background:#111827}
+
+.projects-grid{display:flex;flex-direction:column;gap:.75rem}
+.proj-card{padding:1rem 1.1rem;border:1px solid #111827;border-radius:10px;background:#0d1117;transition:border-color .2s,transform .15s;cursor:pointer}
+.proj-card:hover{border-color:#2a1f3d;transform:translateY(-1px)}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.proj-name{font-size:14px;font-weight:600;color:#c084fc;font-family:'Courier New',monospace;display:flex;align-items:center;gap:6px}
+.proj-name::before{content:'▸';color:#22c55e;font-size:10px}
+.proj-desc{font-size:12.5px;color:#64748b;margin-top:6px;line-height:1.6}
+.proj-meta{display:flex;gap:10px;margin-top:10px;align-items:center}
+.proj-lang{font-size:11px;padding:2px 8px;border-radius:10px}
+.lang-js{background:#2d2008;color:#fbbf24;border:1px solid #3d2f0c}
+.lang-py{background:#071628;color:#7dd3fc;border:1px solid #0c2040}
+.lang-php{background:#1a0a2e;color:#c084fc;border:1px solid #2d1a4a}
+.lang-css{background:#071a2e;color:#67e8f9;border:1px solid #0c2d3f}
+.stars{font-size:11px;color:#4b5563;font-family:'Courier New',monospace;margin-left:auto;display:flex;align-items:center;gap:3px}
+.stars span{color:#f59e0b}
+
+.loading-state{text-align:center;padding:2rem;color:#374151;font-size:13px;font-family:'Courier New',monospace}
+.error-state{color:#ef4444;font-size:12px;font-family:'Courier New',monospace;padding:.5rem 0}
+
+footer{padding:1.25rem 1.5rem;text-align:center}
+footer p{font-size:11px;color:#1f2937;font-family:'Courier New',monospace}
+footer span{color:#c084fc}
+</style>
+
+<h2 class="sr-only">Halim — portfolio page with GitHub projects</h2>
+
+<div class="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+  <button class="lang-btn" onclick="setLang('ar')" id="btn-ar">ع</button>
+</div>
+
+<div class="hero">
+  <div class="avatar-wrap">
+    <img class="avatar" src="https://avatars.githubusercontent.com/u/257418150?v=4" alt="Halim avatar" onerror="this.style.display='none'">
+    <div class="status-dot"></div>
+  </div>
+  <div class="hero-text">
+    <h1>Halim</h1>
+    <div class="username">@WhoIsHalim</div>
+    <p class="bio" id="bio-text">A digital ghost online since 2009 — operated under many aliases, built projects you never knew were his. Now focused on digital marketing & content creation since 2017, with a deep interest in cybersecurity.</p>
+    <div class="tags">
+      <span class="tag purple" id="tag1">Digital Marketing</span>
+      <span class="tag purple" id="tag2">Content Creation</span>
+      <span class="tag" id="tag3">Cybersecurity</span>
+      <span class="tag green" id="tag4">Since 2017</span>
+    </div>
+    <div class="since" id="since-text">// online since <span>2009</span> · many names · one person</div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-label" id="proj-label">pinned projects</div>
+  <div class="projects-grid" id="projects-container">
+    <div class="loading-state" id="loading-msg">// fetching repos from GitHub...</div>
+  </div>
+</section>
+
+<footer>
+  <p>// <span>WhoIsHalim</span>.github.io</p>
+</footer>
+
+<script>
+const texts = {
+  en: {
+    bio: "A digital ghost online since 2009 — operated under many aliases, built projects you never knew were his. Now focused on digital marketing & content creation since 2017, with a deep interest in cybersecurity.",
+    projLabel: "pinned projects",
+    since: '// online since <span>2009</span> · many names · one person',
+    loading: "// fetching repos from GitHub...",
+    noDesc: "No description provided.",
+    error: "// could not fetch repos. check your connection."
+  },
+  ar: {
+    bio: "شبح رقمي على الإنترنت منذ 2009 — اشتغل تحت أسماء كتيرة، وبنى مشاريع ما حدش عرف إنها بتاعته. دلوقتي متخصص في الديجتال ماركتينج وصناعة المحتوى من 2017، ومهتم بشكل أساسي بالسايبر سيكيوريتي.",
+    projLabel: "مشاريع مختارة",
+    since: '// موجود أونلاين من <span>2009</span> · أسماء كتيرة · شخص واحد',
+    loading: "// جاري جلب المشاريع من GitHub...",
+    noDesc: "لا يوجد وصف.",
+    error: "// تعذّر جلب المشاريع. تحقق من الاتصال."
+  }
+};
+
+let lang = 'en';
+let fetchedRepos = null;
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-en').className = 'lang-btn' + (l==='en'?' active':'');
+  document.getElementById('btn-ar').className = 'lang-btn' + (l==='ar'?' active':'');
+  document.getElementById('bio-text').textContent = texts[l].bio;
+  document.getElementById('proj-label').textContent = texts[l].projLabel;
+  document.getElementById('since-text').innerHTML = texts[l].since;
+  if(fetchedRepos) renderRepos(fetchedRepos);
+}
+
+function getLangLabel(lang_name) {
+  const map = {JavaScript:'js',Python:'py',PHP:'php',CSS:'css',TypeScript:'js',HTML:'css'};
+  return map[lang_name] || null;
+}
+
+function renderRepos(repos) {
+  const c = document.getElementById('projects-container');
+  if(!repos || repos.length===0){c.innerHTML='<div class="loading-state">// no public repos found.</div>';return;}
+  c.innerHTML = repos.slice(0,6).map(r=>{
+    const lc = getLangLabel(r.language);
+    const langPill = lc ? `<span class="proj-lang lang-${lc}">${r.language}</span>` : '';
+    const desc = r.description || texts[lang].noDesc;
+    return `<div class="proj-card" onclick="window.open('${r.html_url}','_blank')">
+      <div class="proj-top">
+        <div class="proj-name">${r.name}</div>
+      </div>
+      <div class="proj-desc">${desc}</div>
+      <div class="proj-meta">
+        ${langPill}
+        <div class="stars"><span>★</span> ${r.stargazers_count}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadRepos() {
+  const el = document.getElementById('projects-container');
+  try {
+    const res = await fetch('https://api.github.com/users/WhoIsHalim/repos?sort=updated&per_page=10');
+    if(!res.ok) throw new Error('API error');
+    const data = await res.json();
+    fetchedRepos = data.filter(r=>!r.fork).sort((a,b)=>b.stargazers_count-a.stargazers_count);
+    renderRepos(fetchedRepos);
+  } catch(e) {
+    el.innerHTML = `<div class="error-state">${texts[lang].error}</div>`;
+  }
+}
+
+loadRepos();
+</script>
